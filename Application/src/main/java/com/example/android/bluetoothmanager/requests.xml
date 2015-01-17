@@ -1,0 +1,21 @@
+<DsMain>
+    <request>
+        <Command>
+            GetTruckInfo
+        </Command>
+        <MacAddress>
+            8c:3a:e3:fa:65:5d
+        </MacAddress>
+    </request>
+</DsMain>
+
+<DsMain>
+<request>
+    <Command>
+        GetChange
+    </Command>
+    <MacAddress>
+        8c:3a:e3:fa:65:5d
+    </MacAddress>
+</request>
+</DsMain>
