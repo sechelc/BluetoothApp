@@ -264,8 +264,6 @@ public class BluetoothManagerFragment extends Fragment {
                         case BluetoothManagerService.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             mConversationArrayAdapter.clear();
-                            Intent myIntent = new Intent(getActivity(), StatusReadingsActivity.class);
-                            getActivity().startActivity(myIntent);
                             break;
                         case BluetoothManagerService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
