@@ -25,12 +25,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
-import com.example.android.common.logger.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 /**
@@ -372,16 +373,24 @@ public class BluetoothManagerService {
                     byte[] packetBytes = new byte[bytesAvailable];
                     try {
                         mmInStream.read(packetBytes);
+                        mHandler.obtainMessage(Constants.MESSAGE_READ, packetBytes.length, -1, packetBytes)
+                                .sendToTarget();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    for (int i = 0; i < bytesAvailable; i++) {
+                   /* for (int i = 0; i < bytesAvailable; i++) {
                         byte b = packetBytes[i];
                         if (b == delimiter) {
                             buffer[readBufferPosition++] = b;
                             byte[] encodedBytes = new byte[readBufferPosition];
                             System.arraycopy(buffer, 0, encodedBytes, 0, encodedBytes.length);
-                            // final String data = new String(encodedBytes, "US-ASCII");
+                          *//*  byte[] endPacket=new byte[9];
+                            System.arraycopy(encodedBytes, encodedBytes.length, endPacket, 0, 9);
+                            try {
+                                final String last9Characters = new String(endPacket, "US-ASCII");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }*//*
                             readBufferPosition = 0;
 
                             mHandler.obtainMessage(Constants.MESSAGE_READ, encodedBytes.length, -1, encodedBytes)
@@ -389,7 +398,7 @@ public class BluetoothManagerService {
                         } else {
                             buffer[readBufferPosition++] = b;
                         }
-                    }
+                    }*/
                 }
                 // Send the obtained bytes to the UI Activity
 

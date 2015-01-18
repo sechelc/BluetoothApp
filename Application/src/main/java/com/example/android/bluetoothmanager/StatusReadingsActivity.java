@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.example.android.bluetoothchat.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -69,14 +71,48 @@ public class StatusReadingsActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            ArrayAdapter<String> readingsAdapter;
+            String[] countries = new String[] {
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+            "China",
+            "Bangladesh",
+            "Nepal",
+            "Afghanistan",
+            "North Korea",
+            "South Korea",
+            "Japan"
+           };
+            String[] currency = new String[]{
+                    "Indian Rupee",
+                    "Pakistani Rupee",
+                    "Sri Lankan Rupee",
+                    "Renminbi",
+                    "Bangladeshi Taka",
+                    "Nepalese Rupee",
+                    "Afghani",
+                    "North Korean Won",
+                    "South Korean Won",
+                    "Japanese Yen"
+            };
             View rootView = inflater.inflate(R.layout.fragment_status_readings, container, false);
-            List<String> stringList = new ArrayList<>();
-            stringList.add("ana");
-            readingsAdapter = new ArrayAdapter<>(getActivity(), R.layout.readings_list_layout, R.id.textView, stringList);
+            List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+
+            for(int i=0;i<10;i++){
+                HashMap<String, String> hm = new HashMap<String,String>();
+                hm.put("keys", "Country : " + countries[i]);
+                hm.put("values","Currency : " + currency[i]);
+                aList.add(hm);
+            }
+
+            // Keys used in Hashmap
+            String[] from = { "keys","values"};
+            int[] to = { R.id.keys,R.id.values};
+            SimpleAdapter adapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
+
 
             ListView viewById = (ListView) rootView.findViewById(R.id.list_view_readings);
-            viewById.setAdapter(readingsAdapter);
+            viewById.setAdapter(adapter);
             return rootView;
         }
     }

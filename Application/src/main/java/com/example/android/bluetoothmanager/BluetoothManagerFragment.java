@@ -27,6 +27,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,11 +36,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.android.bluetoothchat.R;
-import com.example.android.common.logger.Log;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static com.example.android.bluetoothmanager.ResponseParser.Entry;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
@@ -54,35 +66,22 @@ public class BluetoothManagerFragment extends Fragment {
 
     // Layout Views
     private ListView mConversationView;
-    private Button getTruckInfoButton;
-    private Button getChangeButton;
-    private Button getReadingsButton;
-
-    /**
-     * Name of the connected device
-     */
     private String mConnectedDeviceName = null;
-
-    /**
-     * Array adapter for the conversation thread
-     */
-    private ArrayAdapter<String> mConversationArrayAdapter;
-
-    /**
-     * Local Bluetooth adapter
-     */
+    private SimpleAdapter mConversationArrayAdapter;
     private BluetoothAdapter mBluetoothAdapter = null;
-
-    /**
-     * Member object for the chat services
-     */
     private BluetoothManagerService mChatService = null;
+    private ResponseParser responseParser = null;
+    private final ScheduledExecutorService scheduler =
+            Executors.newScheduledThreadPool(1);
+
+    private Entry oldResponse = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         // Get local Bluetooth adapter
+        responseParser = new ResponseParser();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // If the adapter is null, then Bluetooth is not supported
@@ -141,9 +140,6 @@ public class BluetoothManagerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mConversationView = (ListView) view.findViewById(R.id.in);
-        getTruckInfoButton = (Button) view.findViewById(R.id.button_getTruckInfo);
-        getChangeButton = (Button) view.findViewById(R.id.button_getChange);
-        getReadingsButton = (Button) view.findViewById(R.id.button_readings);
     }
 
     /**
@@ -153,54 +149,40 @@ public class BluetoothManagerFragment extends Fragment {
         Log.d(TAG, "setupChat()");
 
         // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
+        //   mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
+/*new*/
+        String[] keys = new String[]{
+                "Viscosity",
+                "Temperature",
+                "Yield",
+                "Slump",
+                "Volume"
+        };
+        String[] values = new String[]{
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+        };
+        List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
+        for (int i = 0; i < 5; i++) {
+            HashMap<String, String> hm = new HashMap<String, String>();
+            hm.put("keys", "" + keys[i]);
+            hm.put("values", "" + values[i]);
+            aList.add(hm);
+        }
+
+        // Keys used in Hashmap
+        String[] from = {"keys", "values"};
+        int[] to = {R.id.keys, R.id.values};
+        // SimpleAdapter adapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
+        mConversationArrayAdapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
+
+
+        /*new*/
         mConversationView.setAdapter(mConversationArrayAdapter);
-
-        // Initialize the send button with a listener that for click events
-        getTruckInfoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                View view = getView();
-                if (null != view) {
-                    String streamXml="";
-                    streamXml = "+++";
-                    streamXml += "<DsMain>";
-                    streamXml += "<Command>";
-                    streamXml += "GetTruckInfo";
-                    streamXml += "</Command>";
-                    streamXml += "</DsMain>";
-                    streamXml += "%%%";
-                    sendMessage(streamXml);
-                }
-            }
-        });
-
-        getChangeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                View view = getView();
-                if (null != view) {
-                    String streamXml="";
-                    streamXml = "+++";
-                    streamXml += "<DsMain>";
-                    streamXml += "<Command>";
-                    streamXml += "GetReceiverParameters";
-                    streamXml += "</Command>";
-                    streamXml += "</DsMain>";
-                    streamXml += "%%%";
-                    sendMessage(streamXml);
-                }
-            }
-        });
-
-        getReadingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(getActivity(), StatusReadingsActivity.class);
-                getActivity().startActivity(myIntent);
-            }
-        });
 
         // Initialize the BluetoothManagerService to perform bluetooth connections
         mChatService = new BluetoothManagerService(getActivity(), mHandler);
@@ -212,7 +194,7 @@ public class BluetoothManagerFragment extends Fragment {
      *
      * @param message A string of text to send.
      */
-    private void sendMessage(String message) {
+    public void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothManagerService.STATE_CONNECTED) {
             Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -273,7 +255,21 @@ public class BluetoothManagerFragment extends Fragment {
                     switch (msg.arg1) {
                         case BluetoothManagerService.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
+                            //  mConversationArrayAdapter.clear();
+                            Runnable beeper = new Runnable() {
+                                public void run() {
+                                    String streamXml = "";
+                                    streamXml = "+++";
+                                    streamXml += "<DsMain>";
+                                    streamXml += "<Command>";
+                                    streamXml += "GetTruckInfo";
+                                    streamXml += "</Command>";
+                                    streamXml += "</DsMain>";
+                                    streamXml += "%%%";
+                                    sendMessage(streamXml);
+                                }
+                            };
+                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 15, TimeUnit.SECONDS);
                             break;
                         case BluetoothManagerService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -281,6 +277,7 @@ public class BluetoothManagerFragment extends Fragment {
                         case BluetoothManagerService.STATE_LISTEN:
                         case BluetoothManagerService.STATE_NONE:
                             setStatus(R.string.title_not_connected);
+                            scheduler.shutdown();
                             break;
                     }
                     break;
@@ -288,13 +285,16 @@ public class BluetoothManagerFragment extends Fragment {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    Log.i("m", "message sent:" + writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(readMessage);
+                    Entry data = responseParser.parse(readMessage);
+                    if (data != null) {
+                        // mConversationArrayAdapter.add(readMessage); todo - update the view
+                    }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -310,6 +310,21 @@ public class BluetoothManagerFragment extends Fragment {
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
+            }
+        }
+
+        public void sendMessage(String message) {
+            // Check that we're actually connected before trying anything
+            if (mChatService.getState() != BluetoothManagerService.STATE_CONNECTED) {
+                Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Check that there's actually something to send
+            if (message.length() > 0) {
+                // Get the message bytes and tell the BluetoothManagerService to write
+                byte[] send = message.getBytes();
+                mChatService.write(send);
             }
         }
     };

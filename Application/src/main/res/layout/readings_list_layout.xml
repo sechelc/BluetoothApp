@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:paddingTop="0dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="190dp"
+        android:layout_height="89dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/textView"
+        android:id="@+id/keys"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.17" />
+        android:textAlignment="center"
+        android:gravity="center"
+        android:labelFor="@+id/values" />
+
+    <TextView
+        android:layout_width="191dp"
+        android:layout_height="81dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/values"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
 </LinearLayout>
