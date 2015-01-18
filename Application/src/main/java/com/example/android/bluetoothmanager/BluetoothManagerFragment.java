@@ -293,7 +293,17 @@ public class BluetoothManagerFragment extends Fragment {
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     Entry data = responseParser.parse(readMessage);
                     if (data != null) {
-                        // mConversationArrayAdapter.add(readMessage); todo - update the view
+                        HashMap<String, String> item = (HashMap<String, String>) mConversationArrayAdapter.getItem(4);
+                        item.put("values", data.getVolume());
+                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(3);
+                        item.put("values", data.getSlump());
+                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(2);
+                        item.put("values", data.getYield());
+                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(1);
+                        item.put("values", data.getTempProbe());
+                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(0);
+                        item.put("values", data.getViscosity());
+                        mConversationArrayAdapter.notifyDataSetChanged();
                     }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
