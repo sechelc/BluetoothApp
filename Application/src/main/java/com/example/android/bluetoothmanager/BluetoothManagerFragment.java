@@ -56,6 +56,7 @@ public class BluetoothManagerFragment extends Fragment {
     private ListView mConversationView;
     private Button getTruckInfoButton;
     private Button getChangeButton;
+    private Button getReadingsButton;
 
     /**
      * Name of the connected device
@@ -142,6 +143,7 @@ public class BluetoothManagerFragment extends Fragment {
         mConversationView = (ListView) view.findViewById(R.id.in);
         getTruckInfoButton = (Button) view.findViewById(R.id.button_getTruckInfo);
         getChangeButton = (Button) view.findViewById(R.id.button_getChange);
+        getReadingsButton = (Button) view.findViewById(R.id.button_readings);
     }
 
     /**
@@ -189,6 +191,14 @@ public class BluetoothManagerFragment extends Fragment {
                     streamXml += "%%%";
                     sendMessage(streamXml);
                 }
+            }
+        });
+
+        getReadingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), StatusReadingsActivity.class);
+                getActivity().startActivity(myIntent);
             }
         });
 

@@ -61,7 +61,7 @@ public class StatusReadingsActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        ArrayAdapter<String> readingsAdapter;
+
 
         public PlaceholderFragment() {
         }
@@ -69,9 +69,11 @@ public class StatusReadingsActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            ArrayAdapter<String> readingsAdapter;
             View rootView = inflater.inflate(R.layout.fragment_status_readings, container, false);
-            List<String> stringList = Arrays.asList("ana", "are", "mere", "ana", "are", "mere", "ana", "are", "mere", "ana", "are", "mere");
-            readingsAdapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_status_readings, R.id.readings_item, new ArrayList<String>(stringList));
+            List<String> stringList = new ArrayList<>();
+            stringList.add("ana");
+            readingsAdapter = new ArrayAdapter<>(getActivity(), R.layout.readings_list_layout, R.id.textView, stringList);
 
             ListView viewById = (ListView) rootView.findViewById(R.id.list_view_readings);
             viewById.setAdapter(readingsAdapter);
