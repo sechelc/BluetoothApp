@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference android:key="@string/pref_speed_threshold_key"
+        android:title="@string/pref_speed_alarm"
+        android:defaultValue="@string/pref_speed_alarm_default"
+        android:inputType="numberSigned"
+        android:singleLine="true"></EditTextPreference>
+</PreferenceScreen>

@@ -69,7 +69,7 @@ public class BluetoothManagerService {
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
-
+     *
      * @param context The UI Activity Context
      * @param handler A Handler to send messages back to the UI Activity
      */
@@ -251,6 +251,7 @@ public class BluetoothManagerService {
         // Start the service over to restart listening mode
         BluetoothManagerService.this.start();
     }
+
     /**
      * This thread runs while attempting to make an outgoing connection
      * with a device. It runs straight through; the connection either
@@ -362,7 +363,7 @@ public class BluetoothManagerService {
             boolean stopWorker = false;
             boolean isConnected = false;
             // Keep listening to the InputStream while connected
-            while(true) {
+            while (true) {
                 int bytesAvailable = 0;
                 try {
                     bytesAvailable = mmInStream.available();
@@ -373,32 +374,34 @@ public class BluetoothManagerService {
                     byte[] packetBytes = new byte[bytesAvailable];
                     try {
                         mmInStream.read(packetBytes);
-                        mHandler.obtainMessage(Constants.MESSAGE_READ, packetBytes.length, -1, packetBytes)
-                                .sendToTarget();
+
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                   /* for (int i = 0; i < bytesAvailable; i++) {
+                    for (int i = 0; i < bytesAvailable; i++) {
                         byte b = packetBytes[i];
-                        if (b == delimiter) {
+                        if (b == delimiter && readBufferPosition>9) {
                             buffer[readBufferPosition++] = b;
-                            byte[] encodedBytes = new byte[readBufferPosition];
-                            System.arraycopy(buffer, 0, encodedBytes, 0, encodedBytes.length);
-                          *//*  byte[] endPacket=new byte[9];
-                            System.arraycopy(encodedBytes, encodedBytes.length, endPacket, 0, 9);
+
+                            byte[] endPacket = new byte[9];
+                            System.arraycopy(buffer, readBufferPosition-9, endPacket, 0, 9);
+                            String last9Characters = "";
                             try {
-                                final String last9Characters = new String(endPacket, "US-ASCII");
+                                last9Characters = new String(endPacket, "US-ASCII");
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
-                            }*//*
-                            readBufferPosition = 0;
-
-                            mHandler.obtainMessage(Constants.MESSAGE_READ, encodedBytes.length, -1, encodedBytes)
-                                    .sendToTarget();
+                            }
+                            if (last9Characters.equals("</Packet>")) {
+                                readBufferPosition = 0;
+                                byte[] encodedBytes = new byte[readBufferPosition];
+                                System.arraycopy(buffer, 0, encodedBytes, 0, encodedBytes.length);
+                                mHandler.obtainMessage(Constants.MESSAGE_READ, buffer.length, -1, buffer)
+                                        .sendToTarget();
+                            }
                         } else {
                             buffer[readBufferPosition++] = b;
                         }
-                    }*/
+                    }
                 }
                 // Send the obtained bytes to the UI Activity
 

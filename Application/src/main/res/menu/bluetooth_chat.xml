@@ -20,5 +20,7 @@
         android:icon="@drawable/ic_action_device_access_bluetooth_searching"
         android:showAsAction="ifRoom"
         android:title="@string/secure_connect"/>
-
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:showAsAction="never" />
 </menu>

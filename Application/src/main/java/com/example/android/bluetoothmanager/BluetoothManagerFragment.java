@@ -21,12 +21,15 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,7 +78,7 @@ public class BluetoothManagerFragment extends Fragment {
             Executors.newScheduledThreadPool(1);
 
     private Entry oldResponse = null;
-
+    SharedPreferences app_preferences;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,7 @@ public class BluetoothManagerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        app_preferences =PreferenceManager.getDefaultSharedPreferences(getActivity());
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
@@ -152,9 +156,9 @@ public class BluetoothManagerFragment extends Fragment {
         //   mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
 /*new*/
         String[] keys = new String[]{
-                "Viscosity",
+                "Pressure",
                 "Temperature",
-                "Yield",
+                "Speed",
                 "Slump",
                 "Volume"
         };
@@ -269,7 +273,7 @@ public class BluetoothManagerFragment extends Fragment {
                                     sendMessage(streamXml);
                                 }
                             };
-                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 15, TimeUnit.SECONDS);
+                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 3, TimeUnit.SECONDS);
                             break;
                         case BluetoothManagerService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -277,7 +281,6 @@ public class BluetoothManagerFragment extends Fragment {
                         case BluetoothManagerService.STATE_LISTEN:
                         case BluetoothManagerService.STATE_NONE:
                             setStatus(R.string.title_not_connected);
-                            scheduler.shutdown();
                             break;
                     }
                     break;
@@ -298,11 +301,18 @@ public class BluetoothManagerFragment extends Fragment {
                         item = (HashMap<String, String>) mConversationArrayAdapter.getItem(3);
                         item.put("values", data.getSlump());
                         item = (HashMap<String, String>) mConversationArrayAdapter.getItem(2);
-                        item.put("values", data.getYield());
+                        item.put("values", data.getSpeed());
                         item = (HashMap<String, String>) mConversationArrayAdapter.getItem(1);
                         item.put("values", data.getTempProbe());
                         item = (HashMap<String, String>) mConversationArrayAdapter.getItem(0);
-                        item.put("values", data.getViscosity());
+                        item.put("values", data.getPressure());
+                        try {
+                            if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999"))) {
+                                SmsManager.getDefault().sendTextMessage("0040742402669", null, "speed limit reached", null, null);
+                            }
+                        }catch (NumberFormatException e){
+                            //donothing
+                        }
                         mConversationArrayAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -390,6 +400,10 @@ public class BluetoothManagerFragment extends Fragment {
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+                return true;
+            }case R.id.action_settings:{
+                Intent serverIntent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(serverIntent);
                 return true;
             }
         }

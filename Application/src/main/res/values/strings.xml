@@ -41,5 +41,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="get_readings_button">Get Readings</string>
+    <string name="settings_label">Settings</string>
+    <string name="pref_speed_threshold_key" translatable="false">speed_threshold_key</string>
+    <string name="pref_speed_alarm">Speed alarm threshold</string>
+    <string name="pref_speed_alarm_default" translatable="false">10</string>
 
 </resources>

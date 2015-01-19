@@ -8,12 +8,13 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 /**
  * Created by SechelC on 1/18/2015.
  */
 public class ResponseParser {
-    private static final String ns = null;
+    private static final String ns = "";
     public static final String TRUCK_NO = "TruckNo";
     public static final String PRESSURE = "Pressure";
     public static final String SPEED = "Speed";
@@ -44,24 +45,35 @@ public class ResponseParser {
     private Entry readFeed(XmlPullParser parser) throws IOException, XmlPullParserException {
         Entry entries = null;
 
-        parser.require(XmlPullParser.START_TAG, ns, DS_MAIN);
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
+   //     parser.require(XmlPullParser.START_TAG, ns, DS_MAIN);
+        int eventType = parser.getEventType();
+        Entry currentProduct = null;
+
+        while (eventType != XmlPullParser.END_DOCUMENT){
+            String name = null;
+            switch (eventType){
+                case XmlPullParser.START_DOCUMENT:
+                    break;
+                case XmlPullParser.START_TAG:
+                    name = parser.getName();
+                    if (name.equals(TRUCK_INFO)){
+                        currentProduct = readEntry(parser);
+                        return currentProduct;
+                    }
+                    break;
+                case XmlPullParser.END_TAG:
+                    name = parser.getName();
+                    if (name.equalsIgnoreCase(TRUCK_INFO) && currentProduct != null){
+                        return currentProduct;
+                    }
             }
-            String name = parser.getName();
-            // Starts by looking for the entry tag
-            if (name.equals("TruckInfo")) {
-                entries = readEntry(parser);
-            } else {
-                skip(parser);
-            }
+            eventType = parser.next();
         }
-        return entries;
+
+        return null;
+
     }
 
-    // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
-// to their respective "read" methods for processing. Otherwise, skips the tag.
     private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, TRUCK_INFO);
         String truckNo = INITIAL_VALUE;
