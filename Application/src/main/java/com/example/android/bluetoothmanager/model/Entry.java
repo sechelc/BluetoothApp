@@ -1,4 +1,4 @@
-package com.example.android.bluetoothmanager;
+package com.example.android.bluetoothmanager.model;
 
 /**
  * Created by SechelC on 1/20/2015.

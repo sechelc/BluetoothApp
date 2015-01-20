@@ -38,14 +38,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.android.bluetoothchat.R;
+import com.example.android.bluetoothmanager.helper.ResponseParser;
+import com.example.android.bluetoothmanager.model.Entry;
 
 import java.util.ArrayList;
 import java.util.HashMap;

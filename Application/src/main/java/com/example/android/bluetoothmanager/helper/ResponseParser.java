@@ -1,14 +1,15 @@
-package com.example.android.bluetoothmanager;
+package com.example.android.bluetoothmanager.helper;
 
 import android.util.Log;
 import android.util.Xml;
+
+import com.example.android.bluetoothmanager.model.Entry;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 
 /**
  * Created by SechelC on 1/18/2015.

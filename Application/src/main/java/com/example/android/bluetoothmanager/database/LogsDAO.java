@@ -6,10 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.android.bluetoothmanager.Entry;
-import com.example.android.bluetoothmanager.ResponseParser;
-
-import org.w3c.dom.Comment;
+import com.example.android.bluetoothmanager.model.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
