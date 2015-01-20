@@ -6,4 +6,11 @@
         android:defaultValue="@string/pref_speed_alarm_default"
         android:inputType="numberSigned"
         android:singleLine="true"></EditTextPreference>
+
+    <EditTextPreference android:key="@string/pref_phone_no_key"
+        android:title="@string/phone_no_alarm"
+        android:defaultValue="@string/default_phone_no"
+        android:inputType="text"
+        android:singleLine="true"></EditTextPreference>
+
 </PreferenceScreen>

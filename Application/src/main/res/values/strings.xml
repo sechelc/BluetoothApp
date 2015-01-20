@@ -45,5 +45,8 @@
     <string name="pref_speed_threshold_key" translatable="false">speed_threshold_key</string>
     <string name="pref_speed_alarm">Speed alarm threshold</string>
     <string name="pref_speed_alarm_default" translatable="false">10</string>
+    <string name="pref_phone_no_key" translatable="false">pref_phone_no_key</string>
+    <string name="phone_no_alarm">The phone number to send allerts to</string>
+    <string name="default_phone_no" translatable="false">0040742402669</string>
 
 </resources>

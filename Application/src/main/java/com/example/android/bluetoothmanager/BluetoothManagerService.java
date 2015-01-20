@@ -363,12 +363,13 @@ public class BluetoothManagerService {
             boolean stopWorker = false;
             boolean isConnected = false;
             // Keep listening to the InputStream while connected
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 int bytesAvailable = 0;
                 try {
                     bytesAvailable = mmInStream.available();
                 } catch (IOException e1) {
                     e1.printStackTrace();
+                    interrupt();
                 }
                 if (bytesAvailable > 0) {
                     byte[] packetBytes = new byte[bytesAvailable];

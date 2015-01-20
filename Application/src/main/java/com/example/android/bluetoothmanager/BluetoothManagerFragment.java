@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,7 +55,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.android.bluetoothmanager.ResponseParser.Entry;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
@@ -151,10 +151,16 @@ public class BluetoothManagerFragment extends Fragment {
      */
     private void setupChat() {
         Log.d(TAG, "setupChat()");
+        initializeViewAddapter();
+        /*new*/
+        mConversationView.setAdapter(mConversationArrayAdapter);
 
-        // Initialize the array adapter for the conversation thread
-        //   mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
-/*new*/
+        // Initialize the BluetoothManagerService to perform bluetooth connections
+        mChatService = new BluetoothManagerService(getActivity(), mHandler);
+
+    }
+
+    private void initializeViewAddapter() {
         String[] keys = new String[]{
                 "Pressure",
                 "Temperature",
@@ -183,34 +189,6 @@ public class BluetoothManagerFragment extends Fragment {
         int[] to = {R.id.keys, R.id.values};
         // SimpleAdapter adapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
         mConversationArrayAdapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
-
-
-        /*new*/
-        mConversationView.setAdapter(mConversationArrayAdapter);
-
-        // Initialize the BluetoothManagerService to perform bluetooth connections
-        mChatService = new BluetoothManagerService(getActivity(), mHandler);
-
-    }
-
-    /**
-     * Sends a message.
-     *
-     * @param message A string of text to send.
-     */
-    public void sendMessage(String message) {
-        // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothManagerService.STATE_CONNECTED) {
-            Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothManagerService to write
-            byte[] send = message.getBytes();
-            mChatService.write(send);
-        }
     }
 
     /**
@@ -308,8 +286,9 @@ public class BluetoothManagerFragment extends Fragment {
                         item.put("values", data.getPressure());
                         try {
                             if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999"))) {
-                                SmsManager.getDefault().sendTextMessage("0040742402669", null, "speed limit reached", null, null);
+                                SmsManager.getDefault().sendTextMessage(app_preferences.getString(getString(R.string.pref_phone_no_key), "0040742402669"), null, "speed limit reached", null, null);
                             }
+
                         }catch (NumberFormatException e){
                             //donothing
                         }
@@ -349,12 +328,21 @@ public class BluetoothManagerFragment extends Fragment {
         }
     };
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE_SECURE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
-                    connectDevice(data, true);
+                    AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            connectDevice(data, true);
+                            return null;
+                        }
+                    };
+                    asyncTask.execute();
+
                 }
                 break;
             case REQUEST_ENABLE_BT:
