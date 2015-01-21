@@ -20,6 +20,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -171,9 +172,13 @@ public class BluetoothManagerFragment extends Fragment {
                 "Temperature",
                 "Speed",
                 "Slump",
-                "Volume"
+                "Volume",
+                "Yield",
+                "Viscosity"
         };
         String[] values = new String[]{
+                "0",
+                "0",
                 "0",
                 "0",
                 "0",
@@ -182,7 +187,7 @@ public class BluetoothManagerFragment extends Fragment {
         };
         List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("keys", "" + keys[i]);
             hm.put("values", "" + values[i]);
@@ -243,6 +248,7 @@ public class BluetoothManagerFragment extends Fragment {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothManagerService.STATE_CONNECTED:
+                            truckNoSet=false;
                             retryCount =0;
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             //  mConversationArrayAdapter.clear();
@@ -286,7 +292,8 @@ public class BluetoothManagerFragment extends Fragment {
                         sendAlert(data);
                         storeData(data);
                         if(!truckNoSet) {
-                            setStatus(getString(R.string.truckNo) +" " + data.getTruckNo());
+                            app_preferences.edit().putString(mConnectedDeviceName, data.getTruckNo()).apply();
+                            setStatus(getString(R.string.truckNo) + " " + data.getTruckNo());
                             truckNoSet = true;
                         }
                     }
@@ -332,7 +339,11 @@ public class BluetoothManagerFragment extends Fragment {
         }
 
         private void updateView(Entry data) {
-            HashMap<String, String> item = (HashMap<String, String>) mConversationArrayAdapter.getItem(4);
+            HashMap<String, String> item = (HashMap<String, String>) mConversationArrayAdapter.getItem(6);
+            item.put("values", data.getViscosity());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(5);
+            item.put("values", data.getYield());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(4);
             item.put("values", data.getVolume());
             item = (HashMap<String, String>) mConversationArrayAdapter.getItem(3);
             item.put("values", data.getSlump());
@@ -404,7 +415,8 @@ public class BluetoothManagerFragment extends Fragment {
         address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
         // Get the BluetoothDevice object
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        String address1 = app_preferences.getString(address, address);
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address1);
         // Attempt to connect to the device
         mChatService.connect(device, secure);
     }

@@ -8,7 +8,7 @@
 
     <TextView
         android:layout_width="190dp"
-        android:layout_height="102dp"
+        android:layout_height="73dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/keys"
@@ -20,7 +20,7 @@
 
     <TextView
         android:layout_width="191dp"
-        android:layout_height="102dp"
+        android:layout_height="73dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/values"

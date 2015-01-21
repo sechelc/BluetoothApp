@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -45,7 +46,7 @@ import java.util.Set;
  * Activity in the result Intent.
  */
 public class DeviceListActivity extends Activity {
-
+    private SharedPreferences app_preferences;
     /**
      * Tag for Log
      */
@@ -69,7 +70,7 @@ public class DeviceListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        app_preferences = PreferenceManager.getDefaultSharedPreferences(this);
         // Setup the window
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_device_list);
@@ -120,7 +121,13 @@ public class DeviceListActivity extends Activity {
         if (pairedDevices.size() > 0) {
             findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
             for (BluetoothDevice device : pairedDevices) {
-                pairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                String address = app_preferences.getString(device.getName(), device.getAddress());
+
+                if(!address.equals(device.getAddress())){
+                    address = "Truck Number: " + address;
+                    app_preferences.edit().putString(address, device.getAddress()).commit();
+                }
+                pairedDevicesArrayAdapter.add(device.getName() + "\n" + address);
             }
         } else {
             String noDevices = getResources().getText(R.string.none_paired).toString();
