@@ -253,6 +253,7 @@ containing a value of this type.
         public static final int cardview_light_background=0x7f050001;
         public static final int cardview_shadow_end_color=0x7f050002;
         public static final int cardview_shadow_start_color=0x7f050003;
+        public static final int red=0x7f050004;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f060000;
@@ -349,6 +350,7 @@ containing a value of this type.
         public static final int title_not_connected=0x7f07001d;
         public static final int title_other_devices=0x7f07001e;
         public static final int title_paired_devices=0x7f07001f;
+        public static final int truckNo=0x7f070020;
     }
     public static final class style {
         public static final int AppTheme=0x7f080000;

@@ -76,10 +76,12 @@ public class BluetoothManagerFragment extends Fragment {
     private ResponseParser responseParser = null;
     private LogsDAO logsDAO;
     private final ScheduledExecutorService scheduler =
-            Executors.newScheduledThreadPool(1);
+            Executors.newScheduledThreadPool(3);
 
     private Entry oldResponse = null;
     SharedPreferences app_preferences;
+    private String address;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,6 +233,9 @@ public class BluetoothManagerFragment extends Fragment {
      * The Handler that gets information back from the BluetoothManagerService
      */
     private final Handler mHandler = new Handler() {
+        public int retryCount = 0;
+        public boolean truckNoSet = false;
+
         @Override
         public void handleMessage(Message msg) {
             FragmentActivity activity = getActivity();
@@ -238,6 +243,7 @@ public class BluetoothManagerFragment extends Fragment {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothManagerService.STATE_CONNECTED:
+                            retryCount =0;
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             //  mConversationArrayAdapter.clear();
                             Runnable beeper = new Runnable() {
@@ -253,7 +259,7 @@ public class BluetoothManagerFragment extends Fragment {
                                     sendMessage(streamXml);
                                 }
                             };
-                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 5, TimeUnit.SECONDS);
+                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 3, TimeUnit.SECONDS);
                             break;
                         case BluetoothManagerService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -279,7 +285,10 @@ public class BluetoothManagerFragment extends Fragment {
                         updateView(data);
                         sendAlert(data);
                         storeData(data);
-
+                        if(!truckNoSet) {
+                            setStatus(getString(R.string.truckNo) +" " + data.getTruckNo());
+                            truckNoSet = true;
+                        }
                     }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -292,6 +301,14 @@ public class BluetoothManagerFragment extends Fragment {
                     break;
                 case Constants.MESSAGE_TOAST:
                     if (null != activity) {
+                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case Constants.CONNECT_FAILED:
+                    if (null != activity && retryCount<5) {
+                        connectDevice(address,true);
+                    } else {
                         Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -384,8 +401,15 @@ public class BluetoothManagerFragment extends Fragment {
      */
     private void connectDevice(Intent data, boolean secure) {
         // Get the device MAC address
-        String address = data.getExtras()
+        address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Attempt to connect to the device
+        mChatService.connect(device, secure);
+    }
+
+    private void connectDevice(String address, boolean secure) {
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         // Attempt to connect to the device

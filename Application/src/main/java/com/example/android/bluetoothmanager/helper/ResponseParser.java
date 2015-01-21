@@ -30,6 +30,10 @@ public class ResponseParser {
     public static final String DS_MAIN = "DsMain";
 
     public Entry parse(String response) {
+        response = response.trim();
+        if(!response.startsWith("<")){
+            response = "<" + response;
+        }
         XmlPullParser parser = Xml.newPullParser();
         try {
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
