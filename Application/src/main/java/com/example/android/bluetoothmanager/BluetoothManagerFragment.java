@@ -43,6 +43,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.android.bluetoothchat.R;
+import com.example.android.bluetoothmanager.database.LogsDAO;
 import com.example.android.bluetoothmanager.helper.ResponseParser;
 import com.example.android.bluetoothmanager.model.Entry;
 
@@ -73,6 +74,7 @@ public class BluetoothManagerFragment extends Fragment {
     private BluetoothAdapter mBluetoothAdapter = null;
     private BluetoothManagerService mChatService = null;
     private ResponseParser responseParser = null;
+    private LogsDAO logsDAO;
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(1);
 
@@ -85,7 +87,8 @@ public class BluetoothManagerFragment extends Fragment {
         // Get local Bluetooth adapter
         responseParser = new ResponseParser();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
+        logsDAO = new LogsDAO(getActivity());
+        logsDAO.open();
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             FragmentActivity activity = getActivity();
@@ -116,12 +119,13 @@ public class BluetoothManagerFragment extends Fragment {
         if (mChatService != null) {
             mChatService.stop();
         }
+        logsDAO.close();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        logsDAO.open();
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
@@ -186,7 +190,6 @@ public class BluetoothManagerFragment extends Fragment {
         // Keys used in Hashmap
         String[] from = {"keys", "values"};
         int[] to = {R.id.keys, R.id.values};
-        // SimpleAdapter adapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
         mConversationArrayAdapter = new SimpleAdapter(getActivity(), aList, R.layout.readings_list_layout, from, to);
     }
 
@@ -250,7 +253,7 @@ public class BluetoothManagerFragment extends Fragment {
                                     sendMessage(streamXml);
                                 }
                             };
-                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 3, TimeUnit.SECONDS);
+                            ScheduledFuture<?> scheduledFuture = scheduler.scheduleAtFixedRate(beeper, 0, 5, TimeUnit.SECONDS);
                             break;
                         case BluetoothManagerService.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -273,25 +276,10 @@ public class BluetoothManagerFragment extends Fragment {
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     Entry data = responseParser.parse(readMessage);
                     if (data != null) {
-                        HashMap<String, String> item = (HashMap<String, String>) mConversationArrayAdapter.getItem(4);
-                        item.put("values", data.getVolume());
-                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(3);
-                        item.put("values", data.getSlump());
-                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(2);
-                        item.put("values", data.getSpeed());
-                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(1);
-                        item.put("values", data.getTempProbe());
-                        item = (HashMap<String, String>) mConversationArrayAdapter.getItem(0);
-                        item.put("values", data.getPressure());
-                        try {
-                            if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999"))) {
-                                SmsManager.getDefault().sendTextMessage(app_preferences.getString(getString(R.string.pref_phone_no_key), "0040742402669"), null, "speed limit reached", null, null);
-                            }
+                        updateView(data);
+                        sendAlert(data);
+                        storeData(data);
 
-                        }catch (NumberFormatException e){
-                            //donothing
-                        }
-                        mConversationArrayAdapter.notifyDataSetChanged();
                     }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -309,6 +297,35 @@ public class BluetoothManagerFragment extends Fragment {
                     }
                     break;
             }
+        }
+
+        private void storeData(Entry data) {
+            logsDAO.createEntry(data);
+        }
+
+        private void sendAlert(Entry data) {
+            try {
+                if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999"))) {
+                    SmsManager.getDefault().sendTextMessage(app_preferences.getString(getString(R.string.pref_phone_no_key), "0040742402669"), null, "speed limit reached", null, null);
+                }
+
+            }catch (NumberFormatException e){
+                //donothing
+            }
+        }
+
+        private void updateView(Entry data) {
+            HashMap<String, String> item = (HashMap<String, String>) mConversationArrayAdapter.getItem(4);
+            item.put("values", data.getVolume());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(3);
+            item.put("values", data.getSlump());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(2);
+            item.put("values", data.getSpeed());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(1);
+            item.put("values", data.getTempProbe());
+            item = (HashMap<String, String>) mConversationArrayAdapter.getItem(0);
+            item.put("values", data.getPressure());
+            mConversationArrayAdapter.notifyDataSetChanged();
         }
 
         public void sendMessage(String message) {

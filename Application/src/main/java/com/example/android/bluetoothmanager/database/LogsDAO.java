@@ -18,8 +18,8 @@ public class LogsDAO {
     // Database fields
     private SQLiteDatabase database;
     private MySqlLiteHelper dbHelper;
-    private String[] allColumns = { MySqlLiteHelper.COLUMN_ID,
-            MySqlLiteHelper.COLUMN_PRESSURE };
+    private String[] allColumns = {MySqlLiteHelper.COLUMN_ID,
+            MySqlLiteHelper.COLUMN_PRESSURE};
 
     public LogsDAO(Context context) {
         dbHelper = new MySqlLiteHelper(context);
@@ -49,12 +49,18 @@ public class LogsDAO {
         long insertId = database.insert(MySqlLiteHelper.TABLE_LOGS, null,
                 values);
         Cursor cursor = database.query(MySqlLiteHelper.TABLE_LOGS,
-                allColumns, MySqlLiteHelper.COLUMN_ID + " = " + insertId, null,
+                null, MySqlLiteHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         Entry newEntry = cursorToComment(cursor);
         cursor.close();
         return newEntry;
+    }
+
+    public void updateStatus(int id){
+        ContentValues values = new ContentValues();
+        values.put(MySqlLiteHelper.COLUMN_STATUS, "true");
+        database.update(MySqlLiteHelper.TABLE_LOGS, values, "_id=", new String[]{String.valueOf(id)});
     }
 
     public void deleteEntry(Entry comment) {
@@ -64,11 +70,28 @@ public class LogsDAO {
                 + " = " + id, null);
     }
 
-    public List<Entry> getAllComments() {
+    public List<Entry> getAllEntries() {
         List<Entry> comments = new ArrayList<>();
 
         Cursor cursor = database.query(MySqlLiteHelper.TABLE_LOGS,
-                allColumns, null, null, null, null, null);
+                null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Entry comment = cursorToComment(cursor);
+            comments.add(comment);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return comments;
+    }
+
+    public List<Entry> getAllUnsent() {
+        List<Entry> comments = new ArrayList<>();
+
+        Cursor cursor = database.query(MySqlLiteHelper.TABLE_LOGS,
+                null, "status=?", new String[]{"false"}, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -84,7 +107,16 @@ public class LogsDAO {
     private Entry cursorToComment(Cursor cursor) {
         Entry entry = new Entry();
         entry.setId(cursor.getLong(0));
-        entry.setPressure(cursor.getString(1));
+        entry.setSpeed(cursor.getString(1));
+        entry.setViscosity(cursor.getString(2));
+        entry.setSlump(cursor.getString(3));
+        entry.setTempProbe(cursor.getString(4));
+        entry.setYield(cursor.getString(5));
+        entry.setPressure(cursor.getString(6));
+        entry.setVolume(cursor.getString(7));
+        entry.setTruckNo(cursor.getString(8));
+        entry.setTimestamp(cursor.getString(9));
+        entry.setStatus(cursor.getString(10));
         return entry;
     }
 }

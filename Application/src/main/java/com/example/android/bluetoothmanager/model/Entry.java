@@ -14,6 +14,8 @@ public class Entry {
     public String tempReceiver;
     public String tempProbe;
     private long id;
+    private String timestamp;
+    private String status;
 
     public Entry() {
         truckNo ="0";
@@ -117,5 +119,21 @@ public class Entry {
 
     public long getId() {
         return id;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
