@@ -9,6 +9,20 @@
         <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\classes-203e6be4f3e8e19bdc0cddac0840962abecc1ba7.jar" />
     </item>
     <item
+        jar="C:\Users\sechelc\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
+        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-5e0946f5f8992e7f71abe82e32364f11cbcaa090.jar" />
+    </item>
+    <item
+        jar="C:\apps\BluetoothChat\libs\mail.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="428e267abff0d10802ccde86b915da2c20471160">
+        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\mail-5fee024c9babf0dd0333f13425dd199a4cb7d90c.jar" />
+    </item>
+    <item
         jar="C:\apps\BluetoothChat\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -30,11 +44,18 @@
         <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\classes-22ac6c4be8fac15bf32044006e355fb7f965aacb.jar" />
     </item>
     <item
-        jar="C:\Users\sechelc\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
+        jar="C:\apps\BluetoothChat\libs\activation.jar"
         jumboMode="false"
         revision="21.1.1"
-        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-5e0946f5f8992e7f71abe82e32364f11cbcaa090.jar" />
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
+        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\activation-d0c4fb45d1a8a5bcc8c9c8eeb86fede0b20b87f9.jar" />
+    </item>
+    <item
+        jar="C:\apps\BluetoothChat\libs\additionnal.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
+        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\additionnal-8a40df27fb0076ad6914c93ba93a728bca4d3da0.jar" />
     </item>
 
 </items>

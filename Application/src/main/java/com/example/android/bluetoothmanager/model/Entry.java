@@ -35,6 +35,7 @@ public class Entry {
     private String measurementIndex;
     private String logQty;
     private String addedWater;
+    private String rawData;
 
 
     public Entry() {
@@ -326,5 +327,13 @@ public class Entry {
 
     public void setAddedWater(String addedWater) {
         this.addedWater = addedWater;
+    }
+
+    public String getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(String rawData) {
+        this.rawData = rawData;
     }
 }

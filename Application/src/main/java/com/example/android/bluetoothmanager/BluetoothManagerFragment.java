@@ -18,13 +18,16 @@ package com.example.android.bluetoothmanager;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -46,8 +49,12 @@ import android.widget.Toast;
 import com.example.android.bluetoothchat.R;
 import com.example.android.bluetoothmanager.database.LogsDAO;
 import com.example.android.bluetoothmanager.helper.ResponseParser;
+import com.example.android.bluetoothmanager.mail.GMailSender;
 import com.example.android.bluetoothmanager.model.Entry;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +111,7 @@ public class BluetoothManagerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        app_preferences =PreferenceManager.getDefaultSharedPreferences(getActivity());
+        app_preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
@@ -240,7 +247,7 @@ public class BluetoothManagerFragment extends Fragment {
     private final Handler mHandler = new Handler() {
         public int retryCount = 0;
         public boolean truckNoSet = false;
-        public long lastSentSms=0;
+        public long lastSentSms = 0;
 
         @Override
         public void handleMessage(Message msg) {
@@ -249,8 +256,8 @@ public class BluetoothManagerFragment extends Fragment {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothManagerService.STATE_CONNECTED:
-                            truckNoSet=false;
-                            retryCount =0;
+                            truckNoSet = false;
+                            retryCount = 0;
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                             //  mConversationArrayAdapter.clear();
                             Runnable beeper = new Runnable() {
@@ -292,7 +299,7 @@ public class BluetoothManagerFragment extends Fragment {
                         updateView(data);
                         sendAlert(data);
                         storeData(data);
-                        if(!truckNoSet) {
+                        if (!truckNoSet) {
                             app_preferences.edit().putString(mConnectedDeviceName, data.getTruckNo()).apply();
                             setStatus(getString(R.string.truckNo) + " " + data.getTruckNo());
                             truckNoSet = true;
@@ -314,8 +321,8 @@ public class BluetoothManagerFragment extends Fragment {
                     }
                     break;
                 case Constants.CONNECT_FAILED:
-                    if (null != activity && retryCount<5) {
-                        connectDevice(address,true);
+                    if (null != activity && retryCount < 5) {
+                        connectDevice(address, true);
                     } else {
                         Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
@@ -330,12 +337,12 @@ public class BluetoothManagerFragment extends Fragment {
 
         private void sendAlert(Entry data) {
             try {
-                if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999")) && System.currentTimeMillis()>lastSentSms) {
-                    lastSentSms = System.currentTimeMillis() + 1000 * 60 *3;
+                if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999")) && System.currentTimeMillis() > lastSentSms) {
+                    lastSentSms = System.currentTimeMillis() + 1000 * 60 * 3;
                     SmsManager.getDefault().sendTextMessage(app_preferences.getString(getString(R.string.pref_phone_no_key), "0040742402669"), null, "speed limit reached", null, null);
                 }
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 //donothing
             }
         }
@@ -445,9 +452,77 @@ public class BluetoothManagerFragment extends Fragment {
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
-            }case R.id.action_settings:{
+            }
+            case R.id.action_settings: {
                 Intent serverIntent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(serverIntent);
+                return true;
+            }
+            case R.id.export_data: {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getActivity());
+
+                // set title
+                alertDialogBuilder.setTitle("Achtung!");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Export data ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+
+                                    @Override
+                                    protected Void doInBackground(Void... params) {
+                                        List<Entry> allEntries = logsDAO.getAllEntries();
+                                        String export = "";
+                                        for (Entry allEntry : allEntries) {
+                                            export += allEntry.getRawData() + "\n";
+                                        }
+                                        GMailSender sender = new GMailSender("cristian.v.sechel@gmail.com", "Haidinamo1298");
+                                        try {
+                                            File file = new java.io.File((getActivity()
+                                                    .getApplicationContext().getFileStreamPath("test.txt")
+                                                    .getPath()));
+                                            file.createNewFile();
+                                            if (file.exists()) {
+                                                OutputStream fo = new FileOutputStream(file);
+                                                fo.write(export.getBytes());
+                                                fo.close();
+                                                sender.addAttachment(file);
+                                                sender.sendMail("Data" + System.currentTimeMillis(),
+                                                        "data",
+                                                        "cristian.v.sechel@gmail.com",
+                                                        "cristian.v.sechel@gmail.com");
+                                            }
+                                            file.delete();
+
+                                        } catch (Exception e) {
+                                            Log.e("MailSender", "failed to send email");
+
+                                        }
+
+                                        return null;
+                                    }
+                                };
+                                asyncTask.execute();
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
                 return true;
             }
         }

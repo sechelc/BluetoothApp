@@ -45,7 +45,26 @@ public class LogsDAO {
         values.put(MySqlLiteHelper.COLUMN_YIELD, entry.getYield());
         values.put(MySqlLiteHelper.COLUMN_TIMESTAMP, System.currentTimeMillis());
         values.put(MySqlLiteHelper.COLUMN_STATUS, "false");
-        //todo add all columns
+        values.put(MySqlLiteHelper.MEAS_VOLUME, entry.getMeasVolume());
+        values.put(MySqlLiteHelper.CALC_VOLUME, entry.getCalcVolume());
+        values.put(MySqlLiteHelper.ANGLE, entry.getAngle());
+        values.put(MySqlLiteHelper.RATIO, entry.getRatio());
+        values.put(MySqlLiteHelper.TURN_NUMBER, entry.getTurnNumber());
+        values.put(MySqlLiteHelper.PAIR_LINK_QUALITY, entry.getPairLinkQuality());
+        values.put(MySqlLiteHelper.TURN_COUNT_POS, entry.getTurnCountPos());
+        values.put(MySqlLiteHelper.TURN_COUNT_NEG, entry.getTurnCountNeg());
+        values.put(MySqlLiteHelper.TEMP_AIR, entry.getTempAir());
+        values.put(MySqlLiteHelper.WATER_TEMPERATURE, entry.getWaterTemperature());
+        values.put(MySqlLiteHelper.BATTERY_VOLTAGE, entry.getBatteryVoltage());
+        values.put(MySqlLiteHelper.SUPPLY_VOLTAGE, entry.getSupplyVoltage());
+        values.put(MySqlLiteHelper.CHARGER_VOLTAGE, entry.getChargerVoltage());
+        values.put(MySqlLiteHelper.Z_AXIS, entry.getzAxis());
+        values.put(MySqlLiteHelper.DRUM_STATE, entry.getDrumState());
+        values.put(MySqlLiteHelper.TRUCK_ACTIVITY, entry.getTruckActivity());
+        values.put(MySqlLiteHelper.MEASUREMENT_INDEX, entry.getMeasurementIndex());
+        values.put(MySqlLiteHelper.LOG_QTY, entry.getLogQty());
+        values.put(MySqlLiteHelper.ADDED_WATER, entry.getAddedWater());
+        values.put(MySqlLiteHelper.RAW_DATA, entry.getRawData());
         long insertId = database.insert(MySqlLiteHelper.TABLE_LOGS, null,
                 values);
         Cursor cursor = database.query(MySqlLiteHelper.TABLE_LOGS,
@@ -117,6 +136,26 @@ public class LogsDAO {
         entry.setTruckNo(cursor.getString(8));
         entry.setTimestamp(cursor.getString(9));
         entry.setStatus(cursor.getString(10));
+        entry.setMeasVolume(cursor.getString(11));
+        entry.setCalcVolume(cursor.getString(12));
+        entry.setAngle(cursor.getString(13));
+        entry.setRatio(cursor.getString(14));
+        entry.setTurnNumber(cursor.getString(15));
+        entry.setPairLinkQuality(cursor.getString(16));
+        entry.setTurnCountPos(cursor.getString(17));
+        entry.setTempAir(cursor.getString(18));
+        entry.setTurnCountNeg(cursor.getString(19));
+        entry.setWaterTemperature(cursor.getString(20));
+        entry.setBatteryVoltage(cursor.getString(21));
+        entry.setSupplyVoltage(cursor.getString(22));
+        entry.setChargerVoltage(cursor.getString(23));
+        entry.setzAxis(cursor.getString(24));
+        entry.setDrumState(cursor.getString(25));
+        entry.setTruckActivity(cursor.getString(26));
+        entry.setMeasurementIndex(cursor.getString(27));
+        entry.setLogQty(cursor.getString(28));
+        entry.setAddedWater(cursor.getString(29));
+        entry.setRawData(cursor.getString(30));
         return entry;
     }
 }

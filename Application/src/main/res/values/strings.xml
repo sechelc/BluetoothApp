@@ -35,5 +35,6 @@
     <string name="phone_no_alarm">The phone number to send allerts to</string>
     <string name="default_phone_no" translatable="false">0040742402669</string>
     <string name="truckNo">Truck Number: </string>
+    <string name="export_data">export_data</string>
 
 </resources>

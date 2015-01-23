@@ -59,7 +59,9 @@ public class ResponseParser {
 
             parser.setInput(new StringReader(response));
             parser.nextTag();
-            return readFeed(parser);
+            Entry entry = readFeed(parser);
+            entry.setRawData(response);
+            return entry;
         } catch (XmlPullParserException | IOException e) {
             Log.e("Parser", "Failed to parse message :" + response, e);
         }
