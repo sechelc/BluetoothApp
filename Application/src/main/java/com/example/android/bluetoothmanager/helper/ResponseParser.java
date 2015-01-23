@@ -17,6 +17,25 @@ import java.io.StringReader;
 public class ResponseParser {
     private static final String ns = "";
     public static final String TRUCK_NO = "TruckNo";
+    public static final String MEAS_VOLUME = "MeasVolume";
+    public static final String CALC_VOLUME = "CalcVolume";
+    public static final String ANGLE = "Angle";
+    public static final String RATIO = "Ratio";
+    public static final String TURN_NUMBER = "TurnNumber";
+    public static final String PAIR_LINK_QUALITY = "PairLinkQuality";
+    public static final String TURN_COUNT_POS = "TurnCountPos";
+    public static final String TURN_COUNT_NEG = "TurnCountNeg";
+    public static final String TEMP_AIR = "TempAir";
+    public static final String WATER_TEMPERATURE = "WaterTemperature";
+    public static final String BATTERY_VOLTAGE = "BatteryVoltage";
+    public static final String SUPPLY_VOLTAGE = "SupplyVoltage";
+    public static final String CHARGER_VOLTAGE = "ChargerVoltage";
+    public static final String Z_AXIS = "ZAxis";
+    public static final String DRUM_STATE = "DrumState";
+    public static final String TRUCK_ACTIVITY = "TruckActivity";
+    public static final String MEASUREMENT_INDEX = "MeasurementIndex";
+    public static final String LOG_QTY = "LogQty";
+    public static final String ADDED_WATER = "AddedWater";
     public static final String PRESSURE = "Pressure";
     public static final String SPEED = "Speed";
     public static final String VOLUME = "Volume";
@@ -81,43 +100,74 @@ public class ResponseParser {
 
     private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, TRUCK_INFO);
-        String truckNo = INITIAL_VALUE;
-        String pressure = INITIAL_VALUE;
-        String speed = INITIAL_VALUE;
-        String viscosity = INITIAL_VALUE;
-        String volume = INITIAL_VALUE;
-        String slump = INITIAL_VALUE;
-        String yield = INITIAL_VALUE;
-        String tempProbe = INITIAL_VALUE;
-        String tempReceiver = INITIAL_VALUE;
+        Entry entry = new Entry();
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
             if (name.equals(TRUCK_NO)) {
-                truckNo = readValue(parser, TRUCK_NO);
+                entry.setTruckNo(readValue(parser, TRUCK_NO));
             } else if (name.equals(PRESSURE)) {
-                pressure = readValue(parser, PRESSURE);
+                entry.setPressure(readValue(parser, PRESSURE));
             } else if (name.equals(SPEED)) {
-                speed = readValue(parser, SPEED);
+                entry.setSpeed(readValue(parser, SPEED));
             } else if (name.equals(VISCOSITY)) {
-                viscosity = readValue(parser, VISCOSITY);
+                entry.setViscosity(readValue(parser, VISCOSITY));
             } else if (name.equals(VOLUME)) {
-                volume = readValue(parser, VOLUME);
+                entry.setVolume(readValue(parser, VOLUME));
             } else if (name.equals(SLUMP)) {
-                slump = readValue(parser, SLUMP);
+                entry.setSlump(readValue(parser, SLUMP));
             } else if (name.equals(YIELD)) {
-                yield = readValue(parser, YIELD);
+                entry.setYield(readValue(parser, YIELD));
             } else if (name.equals(TEMP_PROOBE)) {
-                tempProbe = readValue(parser, TEMP_PROOBE);
+                entry.setTempProbe(readValue(parser, TEMP_PROOBE));
             } else if (name.equals(TEMP_RECEIVER)) {
-                tempReceiver = readValue(parser, TEMP_RECEIVER);
+                entry.setTempReceiver(readValue(parser, TEMP_RECEIVER));
+            }else if (name.equals(MEAS_VOLUME)) {
+                entry.setMeasVolume(readValue(parser, MEAS_VOLUME));
+            }else if (name.equals(CALC_VOLUME)) {
+                entry.setCalcVolume(readValue(parser, CALC_VOLUME));
+            }else if (name.equals(ANGLE)) {
+                entry.setAngle(readValue(parser, ANGLE));
+            }else if (name.equals(RATIO)) {
+                entry.setRatio(readValue(parser, RATIO));
+            }else if (name.equals(TURN_NUMBER)) {
+                entry.setTurnNumber(readValue(parser, TURN_NUMBER));
+            }else if (name.equals(PAIR_LINK_QUALITY)) {
+                entry.setPairLinkQuality(readValue(parser, PAIR_LINK_QUALITY));
+            }else if (name.equals(TURN_COUNT_POS)) {
+                entry.setTurnCountPos(readValue(parser, TURN_COUNT_POS));
+            }else if (name.equals(TURN_COUNT_NEG)) {
+                entry.setTurnCountNeg(readValue(parser, TURN_COUNT_NEG));
+            }else if (name.equals(TEMP_AIR)) {
+                entry.setTempAir(readValue(parser, TEMP_AIR));
+            }else if (name.equals(WATER_TEMPERATURE)) {
+                entry.setWaterTemperature(readValue(parser, WATER_TEMPERATURE));
+            }else if (name.equals(BATTERY_VOLTAGE)) {
+                entry.setBatteryVoltage(readValue(parser, BATTERY_VOLTAGE));
+            }else if (name.equals(SUPPLY_VOLTAGE)) {
+                entry.setSupplyVoltage(readValue(parser, SUPPLY_VOLTAGE));
+            }else if (name.equals(CHARGER_VOLTAGE)) {
+                entry.setChargerVoltage(readValue(parser, CHARGER_VOLTAGE));
+            }else if (name.equals(Z_AXIS)) {
+                entry.setzAxis(readValue(parser, Z_AXIS));
+            }else if (name.equals(DRUM_STATE)) {
+                entry.setDrumState(readValue(parser, DRUM_STATE));
+            }else if (name.equals(TRUCK_ACTIVITY)) {
+                entry.setTruckActivity(readValue(parser, TRUCK_ACTIVITY));
+            }else if (name.equals(MEASUREMENT_INDEX)) {
+                entry.setMeasurementIndex(readValue(parser, MEASUREMENT_INDEX));
+            }else if (name.equals(LOG_QTY)) {
+                entry.setLogQty(readValue(parser, LOG_QTY));
+            } else if (name.equals(ADDED_WATER)) {
+                entry.setAddedWater(readValue(parser, ADDED_WATER));
             } else {
                 skip(parser);
             }
         }
-        return new Entry(truckNo, pressure, speed, volume, slump, viscosity, yield, tempReceiver, tempProbe);
+
+        return entry;
     }
 
     private String readValue(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {
