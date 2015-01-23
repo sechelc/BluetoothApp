@@ -240,6 +240,7 @@ public class BluetoothManagerFragment extends Fragment {
     private final Handler mHandler = new Handler() {
         public int retryCount = 0;
         public boolean truckNoSet = false;
+        public long lastSentSms=0;
 
         @Override
         public void handleMessage(Message msg) {
@@ -329,7 +330,8 @@ public class BluetoothManagerFragment extends Fragment {
 
         private void sendAlert(Entry data) {
             try {
-                if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999"))) {
+                if (Double.valueOf(data.getSpeed()) > Integer.valueOf(app_preferences.getString(getString(R.string.pref_speed_threshold_key), "9999")) && System.currentTimeMillis()>lastSentSms) {
+                    lastSentSms = System.currentTimeMillis() + 1000 * 60 *3;
                     SmsManager.getDefault().sendTextMessage(app_preferences.getString(getString(R.string.pref_phone_no_key), "0040742402669"), null, "speed limit reached", null, null);
                 }
 
@@ -423,7 +425,9 @@ public class BluetoothManagerFragment extends Fragment {
 
     private void connectDevice(String address, boolean secure) {
         // Get the BluetoothDevice object
-        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        String address1 = app_preferences.getString(address, address);
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address1);
+
         // Attempt to connect to the device
         mChatService.connect(device, secure);
     }

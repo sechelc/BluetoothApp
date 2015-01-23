@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:paddingTop="0dp"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:keepScreenOn="true">
 
     <TextView
         android:layout_width="190dp"
