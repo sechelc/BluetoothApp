@@ -19,9 +19,9 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.2'
     compile 'com.android.support:gridlayout-v7:21.0.2'
     compile 'com.android.support:cardview-v7:21.0.2'
-    compile files('C:/apps/BluetoothChat/libs/activation.jar')
-    compile files('C:/apps/BluetoothChat/libs/additionnal.jar')
-    compile files('C:/apps/BluetoothChat/libs/mail.jar')
+    compile files('C:/Users/sechelc/AndroidStudioProjects/BluetoothApp/libs/activation.jar')
+    compile files('C:/Users/sechelc/AndroidStudioProjects/BluetoothApp/libs/additionnal.jar')
+    compile files('C:/Users/sechelc/AndroidStudioProjects/BluetoothApp/libs/mail.jar')
 }
 
 // The sample build uses multiple directories to

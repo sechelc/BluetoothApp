@@ -28,12 +28,15 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -53,6 +56,7 @@ import com.example.android.bluetoothchat.R;
 import com.example.android.bluetoothmanager.database.LogsDAO;
 import com.example.android.bluetoothmanager.helper.LocationHelper;
 import com.example.android.bluetoothmanager.helper.ResponseParser;
+import com.example.android.bluetoothmanager.helper.Utils;
 import com.example.android.bluetoothmanager.mail.GMailSender;
 import com.example.android.bluetoothmanager.model.Entry;
 
@@ -113,6 +117,10 @@ public class BluetoothManagerFragment extends Fragment {
         }
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Utils.displayPromptForEnablingGPS(getActivity());
+        }
+        lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
@@ -552,6 +560,13 @@ public class BluetoothManagerFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm=(ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info=cm.getActiveNetworkInfo();
+
+        return(info!=null);
     }
 
 }

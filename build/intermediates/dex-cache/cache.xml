@@ -2,60 +2,60 @@
 <items version="2" >
 
     <item
-        jar="C:\apps\BluetoothChat\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\classes-203e6be4f3e8e19bdc0cddac0840962abecc1ba7.jar" />
-    </item>
-    <item
-        jar="C:\Users\sechelc\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
+        jar="C:\Users\sechelc\AppData\Local\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-5e0946f5f8992e7f71abe82e32364f11cbcaa090.jar" />
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.2-29280ef61c999b614235be2577f8e5395f243f66.jar" />
     </item>
     <item
-        jar="C:\apps\BluetoothChat\libs\mail.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="428e267abff0d10802ccde86b915da2c20471160">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\mail-5fee024c9babf0dd0333f13425dd199a4cb7d90c.jar" />
-    </item>
-    <item
-        jar="C:\apps\BluetoothChat\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-4f2b920f46e61efa64e7652597e04e286c6e1ea4.jar" />
-    </item>
-    <item
-        jar="C:\apps\BluetoothChat\Application\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.2\classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="9742ced04aafd9ac97dd2c66c1aa0e32d2ae7e54">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\classes-e296fc6a00e0d8e5534964c20ede0ed73bdc98f5.jar" />
-    </item>
-    <item
-        jar="C:\apps\BluetoothChat\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.2\classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="b017100da14f9c158c9f5f2f508333c224b24a7c">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\classes-22ac6c4be8fac15bf32044006e355fb7f965aacb.jar" />
-    </item>
-    <item
-        jar="C:\apps\BluetoothChat\libs\activation.jar"
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\libs\activation.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\activation-d0c4fb45d1a8a5bcc8c9c8eeb86fede0b20b87f9.jar" />
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\activation-b44699fcb6fa35bff54ce8eb81ef4e356c38c26f.jar" />
     </item>
     <item
-        jar="C:\apps\BluetoothChat\libs\additionnal.jar"
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\libs\additionnal.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
-        <dex dex="C:\apps\BluetoothChat\Application\build\intermediates\pre-dexed\debug\additionnal-8a40df27fb0076ad6914c93ba93a728bca4d3da0.jar" />
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\additionnal-115c63a928e2b7b09718ddec5a1446687a19fef4.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\classes-2e670189158c5d7a63a9aca583f9c731e15d7895.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.2\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="9742ced04aafd9ac97dd2c66c1aa0e32d2ae7e54">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\classes-b43e8efb642095cfb59916d12292347b36526ed8.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-59c581860ebf54b0d11f7f17bb42c266d5fff928.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.2\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="b017100da14f9c158c9f5f2f508333c224b24a7c">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\classes-3170c363aa1135f75bbf0f6c928605f06a0aa5d4.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\libs\mail.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="428e267abff0d10802ccde86b915da2c20471160">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\mail-ae193d6709774c354cd711633bdf24c02f3ce620.jar" />
     </item>
 
 </items>
