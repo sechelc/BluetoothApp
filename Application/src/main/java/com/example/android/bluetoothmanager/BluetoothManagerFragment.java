@@ -25,6 +25,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,6 +51,7 @@ import android.widget.Toast;
 
 import com.example.android.bluetoothchat.R;
 import com.example.android.bluetoothmanager.database.LogsDAO;
+import com.example.android.bluetoothmanager.helper.LocationHelper;
 import com.example.android.bluetoothmanager.helper.ResponseParser;
 import com.example.android.bluetoothmanager.mail.GMailSender;
 import com.example.android.bluetoothmanager.model.Entry;
@@ -85,6 +89,8 @@ public class BluetoothManagerFragment extends Fragment {
     private LogsDAO logsDAO;
     private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(3);
+    private LocationManager locationManager ;
+    private Location lastLocation = null;
 
     private Entry oldResponse = null;
     SharedPreferences app_preferences;
@@ -105,6 +111,23 @@ public class BluetoothManagerFragment extends Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
+
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                if(LocationHelper.isBetterLocation(location, lastLocation)) {
+                    lastLocation = location;
+                }
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, locationListener);
     }
 
 
@@ -296,6 +319,8 @@ public class BluetoothManagerFragment extends Fragment {
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     Entry data = responseParser.parse(readMessage);
                     if (data != null) {
+                        data.setLatitude("" + lastLocation.getLatitude());
+                        data.setLongitude("" + lastLocation.getLongitude());
                         updateView(data);
                         sendAlert(data);
                         storeData(data);

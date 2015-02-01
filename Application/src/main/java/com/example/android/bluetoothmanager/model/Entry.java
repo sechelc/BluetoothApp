@@ -35,6 +35,8 @@ public class Entry {
     private String measurementIndex;
     private String logQty;
     private String addedWater;
+    private String latitude;
+    private String longitude;
     private String rawData;
 
 
@@ -67,6 +69,8 @@ public class Entry {
         measurementIndex = "0";
         logQty = "0";
         addedWater = "0";
+        latitude = "0";
+        longitude = "0";
     }
 
     public Entry(String truckNo, String pressure, String speed, String volume, String slump, String viscosity, String yield, String tempReceiver, String tempProbe) {
@@ -79,6 +83,22 @@ public class Entry {
         this.yield = yield;
         this.tempReceiver = tempReceiver;
         this.tempProbe = tempProbe;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getTruckNo() {

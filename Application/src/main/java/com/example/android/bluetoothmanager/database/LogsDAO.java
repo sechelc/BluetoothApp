@@ -18,8 +18,6 @@ public class LogsDAO {
     // Database fields
     private SQLiteDatabase database;
     private MySqlLiteHelper dbHelper;
-    private String[] allColumns = {MySqlLiteHelper.COLUMN_ID,
-            MySqlLiteHelper.COLUMN_PRESSURE};
 
     public LogsDAO(Context context) {
         dbHelper = new MySqlLiteHelper(context);
@@ -65,6 +63,8 @@ public class LogsDAO {
         values.put(MySqlLiteHelper.LOG_QTY, entry.getLogQty());
         values.put(MySqlLiteHelper.ADDED_WATER, entry.getAddedWater());
         values.put(MySqlLiteHelper.RAW_DATA, entry.getRawData());
+        values.put(MySqlLiteHelper.LATITUDE, entry.getLatitude());
+        values.put(MySqlLiteHelper.LONGITUDE, entry.getLongitude());
         long insertId = database.insert(MySqlLiteHelper.TABLE_LOGS, null,
                 values);
         Cursor cursor = database.query(MySqlLiteHelper.TABLE_LOGS,
@@ -155,7 +155,9 @@ public class LogsDAO {
         entry.setMeasurementIndex(cursor.getString(27));
         entry.setLogQty(cursor.getString(28));
         entry.setAddedWater(cursor.getString(29));
-        entry.setRawData(cursor.getString(30));
+        entry.setLatitude(cursor.getString(30));
+        entry.setLongitude(cursor.getString(31));
+        entry.setRawData(cursor.getString(32));
         return entry;
     }
 }

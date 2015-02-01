@@ -41,10 +41,12 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
     public static final String MEASUREMENT_INDEX = "MeasurementIndex";
     public static final String LOG_QTY = "LogQty";
     public static final String ADDED_WATER = "AddedWater";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
     public static final String RAW_DATA = "rawData";
 
     private static final String DATABASE_NAME = "ibb.logs.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "create table "
@@ -79,6 +81,8 @@ public class MySqlLiteHelper extends SQLiteOpenHelper {
             + MEASUREMENT_INDEX + " text not null, "
             + LOG_QTY + " text not null, "
             + ADDED_WATER + " text not null, "
+            + LATITUDE + " text not null, "
+            + LONGITUDE + " text not null, "
             + RAW_DATA + " text not null "
             + ");";
 
