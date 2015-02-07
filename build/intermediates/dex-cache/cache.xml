@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\sechelc\.gradle\caches\modules-2\files-2.1\com.google.protobuf\protobuf-java\2.6.1\d9521f2aecb909835746b7a5facf612af5e890e8\protobuf-java-2.6.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d9521f2aecb909835746b7a5facf612af5e890e8">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\protobuf-java-2.6.1-a1740b7e2cbf17f686b635bb9b17f7db32161c8e.jar" />
+    </item>
+    <item
         jar="C:\Users\sechelc\AppData\Local\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.2\support-annotations-21.0.2.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -14,6 +21,13 @@
         revision="21.1.1"
         sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
         <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\activation-b44699fcb6fa35bff54ce8eb81ef4e356c38c26f.jar" />
+    </item>
+    <item
+        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
+        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-59c581860ebf54b0d11f7f17bb42c266d5fff928.jar" />
     </item>
     <item
         jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\libs\additionnal.jar"
@@ -35,13 +49,6 @@
         revision="21.1.1"
         sha1="9742ced04aafd9ac97dd2c66c1aa0e32d2ae7e54">
         <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\classes-b43e8efb642095cfb59916d12292347b36526ed8.jar" />
-    </item>
-    <item
-        jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.2\libs\internal_impl-21.0.2.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
-        <dex dex="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-59c581860ebf54b0d11f7f17bb42c266d5fff928.jar" />
     </item>
     <item
         jar="C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.2\classes.jar"

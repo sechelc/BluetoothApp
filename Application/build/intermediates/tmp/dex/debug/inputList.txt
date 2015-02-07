@@ -6,4 +6,5 @@ C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermedia
 C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\additionnal-115c63a928e2b7b09718ddec5a1446687a19fef4.jar
 C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.2-59c581860ebf54b0d11f7f17bb42c266d5fff928.jar
 C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\mail-ae193d6709774c354cd711633bdf24c02f3ce620.jar
+C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\protobuf-java-2.6.1-a1740b7e2cbf17f686b635bb9b17f7db32161c8e.jar
 C:\Users\sechelc\AndroidStudioProjects\BluetoothApp\Application\build\intermediates\pre-dexed\debug\classes-2e670189158c5d7a63a9aca583f9c731e15d7895.jar

@@ -54,14 +54,27 @@ import android.widget.Toast;
 
 import com.example.android.bluetoothchat.R;
 import com.example.android.bluetoothmanager.database.LogsDAO;
+import com.example.android.bluetoothmanager.helper.AsyncResponse;
 import com.example.android.bluetoothmanager.helper.LocationHelper;
+import com.example.android.bluetoothmanager.helper.RequestTask;
 import com.example.android.bluetoothmanager.helper.ResponseParser;
 import com.example.android.bluetoothmanager.helper.Utils;
 import com.example.android.bluetoothmanager.mail.GMailSender;
 import com.example.android.bluetoothmanager.model.Entry;
+import com.example.android.bluetoothmanager.model.LogEntryProtocol;
 
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +88,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * This fragment controls Bluetooth to communicate with other devices.
  */
-public class BluetoothManagerFragment extends Fragment {
+public class BluetoothManagerFragment extends Fragment implements AsyncResponse{
 
     private static final String TAG = "BluetoothManagerFragment";
 
@@ -121,6 +134,9 @@ public class BluetoothManagerFragment extends Fragment {
             Utils.displayPromptForEnablingGPS(getActivity());
         }
         lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(lastLocation==null){
+            lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
@@ -332,6 +348,7 @@ public class BluetoothManagerFragment extends Fragment {
                         updateView(data);
                         sendAlert(data);
                         storeData(data);
+                        sendData(data);
                         if (!truckNoSet) {
                             app_preferences.edit().putString(mConnectedDeviceName, data.getTruckNo()).apply();
                             setStatus(getString(R.string.truckNo) + " " + data.getTruckNo());
@@ -413,6 +430,12 @@ public class BluetoothManagerFragment extends Fragment {
             }
         }
     };
+
+    private void sendData(Entry data) {
+        if(Utils.isNetworkAvailable(this.getActivity())) {
+            new RequestTask(BluetoothManagerFragment.this).execute(data);
+        }
+    }
 
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         switch (requestCode) {
@@ -504,6 +527,8 @@ public class BluetoothManagerFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                new RequestTask(BluetoothManagerFragment.this).execute(new Entry());
+
                                 AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 
                                     @Override
@@ -531,7 +556,11 @@ public class BluetoothManagerFragment extends Fragment {
                                             }
                                             file.delete();
 
-                                        } catch (Exception e) {
+                                        } catch (
+                                                Exception e
+                                                )
+
+                                        {
                                             Log.e("MailSender", "failed to send email");
 
                                         }
@@ -569,4 +598,10 @@ public class BluetoothManagerFragment extends Fragment {
         return(info!=null);
     }
 
+    @Override
+    public void processFinish(Long output) {
+        if(output!=null){
+            logsDAO.updateStatus(output.intValue());
+        }
+    }
 }

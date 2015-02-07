@@ -4,40 +4,41 @@ package com.example.android.bluetoothmanager.model;
  * Created by SechelC on 1/20/2015.
  */
 public class Entry {
-    public String truckNo;
-    public String pressure;
-    public String speed;
-    public String volume;
-    public String slump;
-    public String viscosity;
-    public String yield;
-    public String tempReceiver;
-    public String tempProbe;
-    private long id;
-    private String timestamp;
-    private String status;
-    private String measVolume;
-    private String calcVolume;
-    private String angle;
-    private String ratio;
-    private String turnNumber;
-    private String pairLinkQuality;
-    private String turnCountPos;
-    private String turnCountNeg;
-    private String tempAir;
-    private String waterTemperature;
-    private String batteryVoltage;
-    private String supplyVoltage;
-    private String chargerVoltage;
-    private String zAxis;
-    private String drumState;
-    private String truckActivity;
-    private String measurementIndex;
-    private String logQty;
-    private String addedWater;
-    private String latitude;
-    private String longitude;
-    private String rawData;
+    public String truckNo="0";
+    public String pressure="0";
+    public String speed="0";
+    public String volume="0";
+    public String slump="0";
+    public String viscosity="0";
+    public String yield="0";
+    public String tempReceiver="0";
+    public String tempProbe="0";
+    private long id=0;
+    private String timestamp="0";
+    private String status="0";
+    private String measVolume="0";
+    private String calcVolume="0";
+    private String angle="0";
+    private String ratio="0";
+    private String turnNumber="0";
+    private String pairLinkQuality="0";
+    private String turnCountPos="0";
+    private String turnCountNeg="0";
+    private String tempAir="0";
+    private String waterTemperature="0";
+    private String batteryVoltage="0";
+    private String supplyVoltage="0";
+    private String chargerVoltage="0";
+    private String zAxis="0";
+    private String drumState="0";
+    private String truckActivity="0";
+    private String measurementIndex="0";
+    private String logQty="0";
+    private String addedWater="0";
+    private String latitude="0";
+    private String longitude="0";
+    private String rawData="0";
+    private String company="test";
 
 
     public Entry() {
@@ -355,5 +356,13 @@ public class Entry {
 
     public void setRawData(String rawData) {
         this.rawData = rawData;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

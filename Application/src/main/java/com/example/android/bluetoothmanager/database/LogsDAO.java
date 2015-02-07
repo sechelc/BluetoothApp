@@ -79,7 +79,7 @@ public class LogsDAO {
     public void updateStatus(int id){
         ContentValues values = new ContentValues();
         values.put(MySqlLiteHelper.COLUMN_STATUS, "true");
-        database.update(MySqlLiteHelper.TABLE_LOGS, values, "_id=", new String[]{String.valueOf(id)});
+        database.update(MySqlLiteHelper.TABLE_LOGS, values, "_id=?", new String[]{String.valueOf(id)});
     }
 
     public void deleteEntry(Entry comment) {
